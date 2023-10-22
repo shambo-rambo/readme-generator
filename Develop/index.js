@@ -1,8 +1,37 @@
-// TODO: Include packages needed for this application
+// Packages needed for this application
 const inquirer = require('inquirer');
 const fs = require('fs');
 
-// TODO: Create an array of questions for user input
+// function will take in the answers object and convert it into the README.md file content
+function generateReadmeContent(answers) {
+    return `
+# ${answers.title}
+
+## Table of Contents
+${answers.contents}
+
+## Installation
+${answers.installation}
+
+## Usage
+${answers.usage}
+
+## License
+${answers.license}
+
+## Contributing
+${answers.contributing}
+
+## Tests
+${answers.tests}
+
+## Questions
+${answers.questions}
+    `;
+}
+
+
+// An array of questions for user input
 const questions = [
     {
         type: 'input',
@@ -22,7 +51,7 @@ const questions = [
     {
         type: 'input',
         name: 'usage',
-        message: 'Write the unsage information for your project.',
+        message: 'Write the usage information for your project.',
     },
     {
         type: 'input',
@@ -46,11 +75,24 @@ const questions = [
     },
 ];
 
-// TODO: Create a function to write README file
-function writeToFile(fileName, data) {}
+// Function to write README file
+function writeToFile(fileName, data) {
+    fs.writeFile(fileName, data, (err) => {
+        if (err) {
+            return console.log(err);
+        }
+        console.log("Successfully created" + fileName);
+    });
+}
 
-// TODO: Create a function to initialize app
-function init() {}
+// Function to initialize app
+function init() {
+    inquirer.prompt(questions).then((answers) => {
+        const readmeContent = generateReadmeContent(answers);
+        writeToFile("README.md", readmeContent);
+    });
+}
 
 // Function call to initialize app
 init();
+  
